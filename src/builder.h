@@ -9,14 +9,12 @@
 class Builder
 {
 public:
-    std::vector<Point> basePoints;
-    std::vector<Line> baseLines;
-    std::vector<Circle> baseCircles;
+    std::vector<const Point*> basePoints;
+    std::vector<const Line*> baseLines;
+    std::vector<const Circle*> baseCircles;
 
-    std::vector<Point> stagePoints;
-    std::vector<Line> stageLines;
-    std::vector<Circle> stageCircles;
-    std::vector<Point> newStagePoints;
+    std::vector<const Point*> stagePoints;
+    std::vector<const Point*> newStagePoints;
 
     Point res1, res2;
 
@@ -33,9 +31,9 @@ public:
     void processLoop(const Point &p1, const Point &p2);
     void processLoop(const Line &l1, const Line &l2);
     void processLoop(const Circle &c1, const Circle &c2);
-    bool findLoop(const Point &p, const std::vector<Point> &points);
-    bool findLoop(const Line &l, const std::vector<Line> &lines);
-    bool findLoop(const Circle &c, const std::vector<Circle> &circles);
+    bool findLoop(const Point &p, const std::vector<const Point*> &points);
+    bool findLoop(const Line &l, const std::vector<const Line*> &lines);
+    bool findLoop(const Circle &c, const std::vector<const Circle*> &circles);
 };
 
 #endif /* EUCL_BUILDER */

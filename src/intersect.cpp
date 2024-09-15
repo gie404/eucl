@@ -61,6 +61,10 @@ int intersect(const Line &l, const Circle &c, Point &res1, Point &res2)
 
 int intersect(const Circle &c1, const Circle &c2, Point &res1, Point &res2)
 {
+    if (*c1.par1 == *c2.par1) {
+        return 0;
+    }
+    
     double nx = c2.par1->x - c1.par1->x;
     double ny = c2.par1->y - c1.par1->y;
     double n = hypot(nx, ny);

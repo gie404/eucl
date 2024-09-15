@@ -16,22 +16,23 @@ int main()
     cout << "basepoints\n";
     for (const auto p : builder.basePoints)
     {
-        cout << p << endl;
+        cout << *p << endl;
     }
     cout << "baselines\n";
     for (const auto l : builder.baseLines)
     {
-        cout << l << endl;
+        cout << *l << endl;
     }
     cout << "basecircles\n";
     for (const auto cir : builder.baseCircles)
     {
-        cout << cir << endl;
+        cout << *cir << endl;
     }
-    cout << "stagepoints\n";
-    for (const auto p: builder.stagePoints) {
-        cout << p << endl;
-    }
+    // cout << "stagepoints\n";
+    // for (const auto p: builder.stagePoints) {
+    //     cout << *p << endl;
+    // }
+    // cout << *((Circle*)(builder.stagePoints[4]->par1)) << " " << *((Circle*)(builder.stagePoints[4]->par2)) << endl;
 
     return 0;
 }

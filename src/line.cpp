@@ -11,6 +11,7 @@ Line::Line(double nx, double ny, double c) {
     this->ny = ny;
     this->c = c;
     par1 = par2 = nullptr;
+    type = 0;
 }
 
 Line::Line(const Point &parent1, const Point &parent2)

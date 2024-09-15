@@ -41,8 +41,8 @@ void printSubTree(const Curve *node, int indent)
 
 Builder::Builder()
 {
-    stagePoints.push_back(Point(0, 0, nullptr, nullptr));
-    stagePoints.push_back(Point(1, 0, nullptr, nullptr));
+    stagePoints.push_back(new Point(0, 0, nullptr, nullptr));
+    stagePoints.push_back(new Point(1, 0, nullptr, nullptr));
 }
 
 void Builder::processLoop(const Point &p1, const Point &p2)
@@ -55,14 +55,7 @@ void Builder::processLoop(const Point &p1, const Point &p2)
 void Builder::processLoop(const Line &l1, const Line &l2)
 {
     cout << "Loop " << l1 << " " << l2 << endl;
-    cout << "basep\n";
-    for(auto &p: basePoints){
-        cout << p << endl;
-    }
-    cout << "basel\n";
-    for(auto &p: baseLines){
-        cout << p << " " << *p.par1 << " " << *p.par2 << endl;
-    }
+
     printSubTree(&l1, 0);
     printSubTree(&l2, 0);
 }
@@ -74,35 +67,41 @@ void Builder::processLoop(const Circle &c1, const Circle &c2)
     printSubTree(&c2, 0);
 }
 
-bool Builder::findLoop(const Point &p, const std::vector<Point> &points)
+bool Builder::findLoop(const Point &el, const std::vector<const Point *> &elps)
 {
-    const auto match = find(points.begin(), points.end(), p);
-    if (match != points.end())
+    for (const auto elp : elps)
     {
-        processLoop(p, *match);
-        return false;
+        if (el == *elp)
+        {
+            processLoop(el, *elp);
+            return false;
+        }
     }
     return true;
 }
 
-bool Builder::findLoop(const Line &l, const std::vector<Line> &lines)
+bool Builder::findLoop(const Line &el, const std::vector<const Line *> &elps)
 {
-    const auto match = find(lines.begin(), lines.end(), l);
-    if (match != lines.end())
+    for (const auto elp : elps)
     {
-        processLoop(l, *match);
-        return false;
+        if (el == *elp)
+        {
+            processLoop(el, *elp);
+            return false;
+        }
     }
     return true;
 }
 
-bool Builder::findLoop(const Circle &c, const std::vector<Circle> &circles)
+bool Builder::findLoop(const Circle &el, const std::vector<const Circle *> &elps)
 {
-    const auto match = find(circles.begin(), circles.end(), c);
-    if (match != circles.end())
+    for (const auto elp : elps)
     {
-        processLoop(c, *match);
-        return false;
+        if (el == *elp)
+        {
+            processLoop(el, *elp);
+            return false;
+        }
     }
     return true;
 }
@@ -116,57 +115,51 @@ bool Builder::isNewPoint(const Point &p)
 
 bool Builder::isNewLine(const Line &l)
 {
-    return findLoop(l, baseLines) &&
-           findLoop(l, stageLines);
+    return findLoop(l, baseLines);
 }
 
 bool Builder::isNewCircle(const Circle &c)
 {
-    return findLoop(c, baseCircles) &&
-           findLoop(c, stageCircles);
+    return findLoop(c, baseCircles);
 }
 
-void Builder::addPointToBase(const Point &point)
+void Builder::addPointToBase(const Point &p)
 {
-    basePoints.push_back(point);
-    const Point &p = basePoints.back();
-
-    for (size_t i = 0; i < basePoints.size() - 1; ++i)
+    for (const auto bp : basePoints)
     {
-        const Point &bp = basePoints[i];
-        addLineToBase(Line(p, bp));
-        addCircleToBase(Circle(p, bp));
-        addCircleToBase(Circle(bp, p));
+        addLineToBase(Line(p, *bp));
+        addCircleToBase(Circle(p, *bp));
+        addCircleToBase(Circle(*bp, p));
     }
+    basePoints.push_back(&p);
 }
 
 void Builder::addLineToBase(const Line &line)
 {
     if (isNewLine(line))
     {
-        baseLines.push_back(line);
-        const Line &l = baseLines.back();
-
-        for (size_t i = 0; i < baseLines.size() - 1; ++i)
+        const Line *l = new Line(line);
+        for (const auto bl : baseLines)
         {
-            const size_t count = intersect(l, baseLines[i], res1);
+            const size_t count = intersect(*l, *bl, res1);
             if (count == 1 && isNewPoint(res1))
             {
-                newStagePoints.push_back(res1);
+                newStagePoints.push_back(new Point(res1));
             }
         }
-        for (const Circle &bcircle : baseCircles)
+        for (const auto bc : baseCircles)
         {
-            const size_t count = intersect(l, bcircle, res1, res2);
+            const size_t count = intersect(*l, *bc, res1, res2);
             if (count >= 1 && isNewPoint(res1))
             {
-                newStagePoints.push_back(res1);
+                newStagePoints.push_back(new Point(res1));
             }
             if (count == 2 && isNewPoint(res2))
             {
-                newStagePoints.push_back(res2);
+                newStagePoints.push_back(new Point(res2));
             }
         }
+        baseLines.push_back(l);
     }
 }
 
@@ -174,45 +167,42 @@ void Builder::addCircleToBase(const Circle &circle)
 {
     if (isNewCircle(circle))
     {
-        baseCircles.push_back(circle);
-        const Circle &c = baseCircles.back();
-        // cout << "circle " << c << " basel " << baseLines.size() << " basec " << baseCircles.size() << endl;
-
-        for (const Line &bline : baseLines)
+        const Circle *c = new Circle(circle);
+        for (const auto bl : baseLines)
         {
-            const size_t count = intersect(bline, c, res1, res2);
-            // cout << "inter " << bline << " " << c << " count " << count << endl;
+            const size_t count = intersect(*bl, *c, res1, res2);
             if (count >= 1 && isNewPoint(res1))
             {
-                newStagePoints.push_back(res1);
+                newStagePoints.push_back(new Point(res1));
             }
             if (count == 2 && isNewPoint(res2))
             {
-                newStagePoints.push_back(res2);
+                newStagePoints.push_back(new Point(res2));
             }
         }
-        for (size_t i = 0; i < baseCircles.size() - 1; ++i)
+        for (const auto bc : baseCircles)
         {
-            const size_t count = intersect(c, baseCircles[i], res1, res2);
-            // cout << "inter " << c << " " << baseCircles[i] << " count " << count << endl;
+            const size_t count = intersect(*c, *bc, res1, res2);
             if (count >= 1 && isNewPoint(res1))
             {
-                newStagePoints.push_back(res1);
+                newStagePoints.push_back(new Point(res1));
             }
             if (count == 2 && isNewPoint(res2))
             {
-                newStagePoints.push_back(res2);
+                newStagePoints.push_back(new Point(res2));
             }
         }
+        baseCircles.push_back(c);
     }
 }
 
 void Builder::doStep()
 {
-    for (const Point &sp : stagePoints)
+    for (const auto sp : stagePoints)
     {
-        addPointToBase(sp);
+        addPointToBase(*sp);
     }
+    cout << "len " << stagePoints.size() << " " << newStagePoints.size() << endl;
     stagePoints = newStagePoints;
     newStagePoints.clear();
 }

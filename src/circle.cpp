@@ -11,7 +11,7 @@ Circle::Circle(Point &c, double rSq)
     par1 = &c;
     this->rSq = rSq;
     par2 = nullptr;
-
+    type = 1;
 }
 
 Circle::Circle(const Point &parent1, const Point &parent2)
