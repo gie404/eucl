@@ -10,7 +10,7 @@ Point::Point()
     par1 = par2 = nullptr;
 }
 
-Point::Point(double x, double y, Curve *par1, Curve *par2)
+Point::Point(double x, double y, const Curve *par1, const Curve *par2)
 {
     this->x = x;
     this->y = y;

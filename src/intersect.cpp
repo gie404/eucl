@@ -73,7 +73,6 @@ int intersect(const Circle &c1, const Circle &c2, Point &res1, Point &res2)
     double c = c2.par1->x * c2.par1->x + c2.par1->y * c2.par1->y - c1.par1->x * c1.par1->x - c1.par1->y * c1.par1->y + c1.rSq - c2.rSq;
     c /= 2 * n;
     Line l = Line(nx, ny, c);
-    std::cout << l << std::endl;
     int count = intersect(l, c2, res1, res2);
     res1.par1 = &c1;
     res2.par1 = &c1;

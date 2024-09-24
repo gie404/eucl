@@ -11,10 +11,11 @@ public:
     double y;
     const Curve *par1;
     const Curve *par2;
+    mutable size_t id;
 
     Point();
 
-    Point(double x, double y, Curve *par1, Curve *par2);
+    Point(double x, double y,const Curve *par1, const Curve *par2);
 
     bool operator==(const Point &p) const;
 

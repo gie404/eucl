@@ -6,6 +6,7 @@ class Curve
 {
 public:
     int type;
+    mutable size_t id;
     const Point *par1;
     const Point *par2;
 };
