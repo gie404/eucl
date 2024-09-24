@@ -46,6 +46,8 @@ public:
 
     bool isContained(const Curve *p1, const Curve *p2 ,std::array<const Point *, 2> &binding);
     bool isContained(const Point *p1, const Point *p2, std::array<const Point *, 2> &binding);
+
+    void stat();
 };
 
 #endif /* EUCL_BUILDER */

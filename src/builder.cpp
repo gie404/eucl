@@ -56,6 +56,24 @@ bool Builder::isContained(const Point *p1, const Point *p2, std::array<const Poi
                isContained(p1->par2, p2->par1, nb2);
 }
 
+void Builder::stat()
+{
+    cout << "Bases p(" << basePoints.size() << ") l(" << baseLines.size() << ") c(" << baseCircles.size() << ")\n";
+    size_t pls = 0, lls = 0, cls = 0;
+    for (const auto &l: pointLoops) {
+        pls += l.second.size();
+    }
+    for (const auto &l: lineLoops) {
+        lls += l.second.size();
+    }
+    for (const auto &l: circleLoops) {
+        cls += l.second.size();
+    }
+    cout << "Loops p(" << pointLoops.size() << "/" << pls <<  ")";
+    cout << " l(" << lineLoops.size() << "/" << lls <<  ")";
+    cout << " c(" << circleLoops.size() << "/" << cls << ")" << endl;
+}
+
 void printSubTree(const Curve *node, int indent);
 
 void printSubTree(const Point *node, int indent)
@@ -327,8 +345,7 @@ void Builder::doStep()
     {
         addPointToBase(*sp);
         cout << "step " << i++ << "/" << stagePoints.size() << " newbasepoints " << newStagePoints.size() << endl;
-        cout << "Bases p(" << basePoints.size() << ") l(" << baseLines.size() << ") c(" << baseCircles.size() << ")\n";
-        cout << "Loops p(" << pointLoops.size() << ") l(" << lineLoops.size() << ") c(" << circleLoops.size() << ")\n";
+        stat();
     }
     // cout << "len " << stagePoints.size() << " " << newStagePoints.size() << endl;
     stagePoints = newStagePoints;
