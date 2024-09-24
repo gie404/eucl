@@ -114,18 +114,41 @@ void Builder::processLoop(const Point &p, const Point &basePoint)
 
 void Builder::processLoop(const Line &l, const Line &baseLine)
 {
-    // cout << "Loop " << l1 << " " << l2 << endl;
-
-    // printSubTree(&l1, 0);
-    // printSubTree(&l2, 0);
+    for (const auto &loopBase : lineLoops)
+    {
+        for (const auto &loop : loopBase.second)
+        {
+            const Line nl(*loop.first, *loop.second);
+            array<const Point *, 2> binding = {nullptr, nullptr};
+            if (isContained(&l, &nl, binding))
+            {
+                // cout << "contained " << p << endl;
+                return;
+            }
+        }
+    }
+    printSubTree(&l, 0);
+    printSubTree(&baseLine, 0);
     lineLoops[baseLine.id].push_back(make_pair(l.par1, l.par2));
 }
 
 void Builder::processLoop(const Circle &c, const Circle &baseCircle)
 {
-    // cout << "Loop " << c1 << " " << c2 << endl;
-    // printSubTree(&c1, 0);
-    // printSubTree(&c2, 0);
+    for (const auto &loopBase : circleLoops)
+    {
+        for (const auto &loop : loopBase.second)
+        {
+            const Circle nc(*loop.first, *loop.second);
+            array<const Point *, 2> binding = {nullptr, nullptr};
+            if (isContained(&c, &nc, binding))
+            {
+                // cout << "contained " << p << endl;
+                return;
+            }
+        }
+    }
+    printSubTree(&c, 0);
+    printSubTree(&baseCircle, 0);
     circleLoops[baseCircle.id].push_back(make_pair(c.par1, c.par2));
 }
 
