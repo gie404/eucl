@@ -11,7 +11,7 @@ public:
     double y;
     const Curve *par1;
     const Curve *par2;
-    mutable size_t id;
+    mutable size_t id = 123456;
 
     Point();
 

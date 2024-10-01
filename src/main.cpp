@@ -13,9 +13,10 @@ int main()
     builder.doStep();
     cout << "-----------step2\n";
     builder.doStep();
-    cout << "-----------step3\n";
-    builder.doStep();
+    // cout << "-----------step3\n";
+    // builder.doStep();
 
     builder.stat();
+    
     return 0;
 }

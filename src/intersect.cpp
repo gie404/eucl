@@ -39,8 +39,8 @@ int intersect(const Line &l, const Circle &c, Point &res1, Point &res2)
     {
         res1.x = l.c * l.nx + a1 * l.ny;
         res1.y = l.c * l.ny - a1 * l.nx;
-        res1.par1 = &l;
-        res1.par2 = &c;
+        res1.par1 = &c;
+        res1.par2 = &l;
         return 1;
     }
     const double sqrtd = std::sqrt(d);
@@ -49,13 +49,13 @@ int intersect(const Line &l, const Circle &c, Point &res1, Point &res2)
 
     res1.x = l.c * l.nx - t1 * l.ny;
     res1.y = l.c * l.ny + t1 * l.nx;
-    res1.par1 = &l;
-    res1.par2 = &c;
+    res1.par1 = &c;
+    res1.par2 = &l;
 
     res2.x = l.c * l.nx - t2 * l.ny;
     res2.y = l.c * l.ny + t2 * l.nx;
-    res2.par1 = &l;
-    res2.par2 = &c;
+    res2.par1 = &c;
+    res2.par2 = &l;
     return 2;
 }
 
@@ -74,7 +74,7 @@ int intersect(const Circle &c1, const Circle &c2, Point &res1, Point &res2)
     c /= 2 * n;
     Line l = Line(nx, ny, c);
     int count = intersect(l, c2, res1, res2);
-    res1.par1 = &c1;
-    res2.par1 = &c1;
+    res1.par2 = &c1;
+    res2.par2 = &c1;
     return count;
 }
