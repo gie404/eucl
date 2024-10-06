@@ -13,10 +13,11 @@ int main()
     builder.doStep();
     cout << "-----------step2\n";
     builder.doStep();
-    // cout << "-----------step3\n";
+    cout << "-----------step3\n";
     // builder.doStep();
 
     builder.stat();
-    
+    int hg;
+    cin >> hg;
     return 0;
 }

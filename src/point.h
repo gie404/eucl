@@ -1,10 +1,11 @@
 #ifndef EUCL_POINT
 #define EUCL_POINT
 #include <ostream>
+#include "element.h"
 
 class Curve;
 
-class Point
+class Point : public Element
 {
 public:
     double x;

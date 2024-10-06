@@ -11,4 +11,6 @@ line.cpp
 main.cpp
 point.cpp
 builder.cpp
+trie.cpp
+loopStorage.cpp
 )

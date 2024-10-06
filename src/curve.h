@@ -1,8 +1,10 @@
 #ifndef EUCL_CURVE
 #define EUCL_CURVE
+#include "element.h"
+
 class Point;
 
-class Curve
+class Curve : public Element
 {
 public:
     int type;

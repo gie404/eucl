@@ -9,6 +9,7 @@
 #include "point.h"
 #include "line.h"
 #include "circle.h"
+#include "loopStorage.h"
 
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
@@ -23,6 +24,8 @@ public:
     std::vector<const Point *> basePoints;
     std::vector<const Line *> baseLines;
     std::vector<const Circle *> baseCircles;
+
+    LoopStorage loops;
     std::vector<std::pair<const Point *, const Point *>> pointLoops;
     std::vector<std::pair<const Line *, const Line *>> lineLoops;
     std::vector<std::pair<const Circle *, const Circle *>> circleLoops;

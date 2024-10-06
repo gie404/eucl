@@ -65,46 +65,7 @@ bool Builder::isContained(const Curve *p1, const Curve *p2, vector<array<const P
             }
         };
     }
-    // if (p1->type == 0)
-    // {
-    //     cout << *(Line *)p1;
-    // }
-    // else
-    // {
-    //     cout << *(Circle *)p1;
-    // }
-    // cout << " vs ";
-    // if (p2->type == 0)
-    // {
-    //     cout << *(Line *)p2;
-    // }
-    // else
-    // {
-    //     cout << *(Circle *)p2;
-    // }
-    // cout << endl;
-    // for (auto &b : bindings)
-    // {
-    //     cout << "binding ";
-    //     if (b[0])
-    //     {
-    //         cout << *b[0];
-    //     }
-    //     else
-    //     {
-    //         cout << "null";
-    //     }
-    //     cout << " ";
-    //     if (b[1])
-    //     {
-    //         cout << *b[1];
-    //     }
-    //     else
-    //     {
-    //         cout << "null";
-    //     }
-    //     cout << endl;
-    // }
+
     return bindings.size() > 0;
 }
 
@@ -175,29 +136,6 @@ bool Builder::isContained(const Point *p1, const Point *p2, vector<array<const P
             }
         }
     }
-    // cout << *p1 << " vs " << *p2 << endl;
-    // for (auto &b : bindings)
-    // {
-    //     cout << "binding ";
-    //     if (b[0])
-    //     {
-    //         cout << *b[0];
-    //     }
-    //     else
-    //     {
-    //         cout << "null";
-    //     }
-    //     cout << " ";
-    //     if (b[1])
-    //     {
-    //         cout << *b[1];
-    //     }
-    //     else
-    //     {
-    //         cout << "null";
-    //     }
-    //     cout << endl;
-    // }
     return bindings.size() > 0;
 }
 
@@ -216,7 +154,8 @@ void printSubTree(const Point *node, int indent)
 {
     if (node != nullptr)
     {
-        if (node->par1 == nullptr) {
+        if (node->par1 == nullptr)
+        {
             cout << string(indent, ' ') << "r(" << node->x << ", " << node->y << ")" << endl;
             return;
         }
@@ -225,6 +164,7 @@ void printSubTree(const Point *node, int indent)
         printSubTree(node->par2, indent + 4);
     }
 }
+
 void printSubTree(const Curve *node, int indent)
 {
     if (node != nullptr)
@@ -244,7 +184,7 @@ void printSubTree(const Curve *node, int indent)
     }
 }
 
-Builder::Builder()
+Builder::Builder() : loops(pointR0, pointR1)
 {
     stagePoints.push_back(&pointR0);
     stagePoints.push_back(&pointR1);
@@ -334,12 +274,13 @@ void Builder::processLoop(const Point &point, const Point &basePoint)
         vector<array<const Point *, 2>> bindings;
         if (isContained(&l1, &l2, bindings))
         {
-            // cout << "contained " << *p << endl;
+            cout << "contained " << *p << endl;
             // printSubTree(p, 0);
             // printSubTree(&basePoint, 0);
             // cout << "in-----------" << endl;
             // printSubTree(l2.par1, 0);
             // printSubTree(l2.par2, 0);
+            cout << "test2----- " << loops.isOriginalLoop(l1) << endl;
 
             delete (p);
             return;
@@ -349,7 +290,18 @@ void Builder::processLoop(const Point &point, const Point &basePoint)
     printSubTree(p, 0);
     printSubTree(&basePoint, 0);
     pointLoops.push_back(make_pair(p, &basePoint));
-    // string repr;
+
+    loops.insertLoop(l1);
+    vector<string> reprs;
+    loops.makeAllRepr(l1, reprs, 0);
+    cout << "count " << loops.size() << " " << loops.reprSize() << " " << loops.charSize() << endl;
+    // for (auto &repr : reprs)
+    // {
+    //     cout << "repr " << repr << endl;
+    // }
+
+    // int kk;
+    // cin >> kk;
     // insertToRepr(l1, repr, 0);
     // bool needReplace = false;
     // for (auto &ch: repr){
@@ -383,13 +335,13 @@ void Builder::processLoop(const Line &line, const Line &baseLine)
         vector<array<const Point *, 2>> bindings;
         if (isContained(&p1, &p2, bindings))
         {
-            // cout << "contained " << *l << endl;
+            cout << "contained " << *l << endl;
             // printSubTree(l, 0);
             // printSubTree(&baseLine, 0);
             // cout << "in-----------" << endl;
             // printSubTree(p2.par1, 0);
             // printSubTree(p2.par2, 0);
-
+            cout << "test------ " << loops.isOriginalLoop(p1) << endl;
             delete (l);
             return;
         }
@@ -398,6 +350,18 @@ void Builder::processLoop(const Line &line, const Line &baseLine)
     printSubTree(l, 0);
     printSubTree(&baseLine, 0);
     lineLoops.push_back(make_pair(l, &baseLine));
+    loops.insertLoop(p1);
+    vector<string> reprs;
+    loops.makeAllRepr(p1, reprs, 0);
+    cout << "count " << loops.size() << " " << loops.reprSize() << " " << loops.charSize() << endl;
+    // for (auto &repr : reprs)
+    // {
+    //     cout << "repr " << repr << endl;
+    // }
+
+    // int kk;
+    // cin >> kk;
+    
 }
 
 void Builder::processLoop(const Circle &circle, const Circle &baseCircle)
@@ -413,12 +377,13 @@ void Builder::processLoop(const Circle &circle, const Circle &baseCircle)
         vector<array<const Point *, 2>> bindings;
         if (isContained(&p1, &p2, bindings))
         {
-            // cout << "contained " << *c << endl;
+            cout << "contained " << *c << endl;
             // printSubTree(c, 0);
             // printSubTree(&baseCircle, 0);
             // cout << "in-----------" << endl;
             // printSubTree(p2.par1, 0);
             // printSubTree(p2.par2, 0);
+            cout << "test------ " << loops.isOriginalLoop(p1) << endl;
 
             delete (c);
             return;
@@ -428,6 +393,18 @@ void Builder::processLoop(const Circle &circle, const Circle &baseCircle)
     printSubTree(c, 0);
     printSubTree(&baseCircle, 0);
     circleLoops.push_back(make_pair(c, &baseCircle));
+    loops.insertLoop(p1);
+    vector<string> reprs;
+    loops.makeAllRepr(p1, reprs, 0);
+    cout << "count " << loops.size() << " " << loops.reprSize() << " " << loops.charSize() << endl;
+    // for (auto &repr : reprs)
+    // {
+    //     cout << "repr " << repr << endl;
+    // }
+
+    // int kk;
+    // cin >> kk;
+    
 }
 
 bool Builder::findLoop(const Point &el, const std::vector<const Point *> &elps)
